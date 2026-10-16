@@ -21,6 +21,7 @@ subida por bloques, SSE, App Attest, universal links, Keychain y limpieza al cer
 | Consentimiento | Paridad con ADR-AND-0033: de la persona, denegado por defecto, se retira al cerrar sesión; gobierna PostHog y Crashlytics |
 | Keycloak | Cliente público `venuenexa-ios` en el Keycloak de pruebas del repo (se añade en F3) |
 | Red en local | Todo por HTTPS, **sin** excepciones de ATS (ADR-IOS-0004) |
+| Keychain tras reinstalar | **A** (Andy, 2026-10-16): `FreshInstallGuard` borra el Keychain en el primer arranque tras instalar; no se conserva la sesión entre reinstalaciones. Recomendación del agente, elegida por Andy. Reversible |
 
 ## Niveles de verificación
 A Linux (Codespace): `swift test` de los paquetes de Swift puro. B macOS (runner o Mac): `swift test`, compilación para el
@@ -55,6 +56,6 @@ simulador de iOS, SwiftLint, capturas. C iPhone real.
 Codespace con el puerto 8080 público. No verificado desde iOS.
 
 ## Huecos decididos por el agente (a confirmar con Andy)
-- `FreshInstallGuard`: se borra el Keychain en el primer arranque tras instalar (ningún ADR lo trata). Reversible.
+- ~~`FreshInstallGuard`~~: **decidido por Andy el 2026-10-16 (opción A)**, ver la tabla de decisiones. Ningún ADR lo trata: conviene llevarlo a ADR-IOS-0007.
 - El Diagnóstico (simulador de capacidades y evidencia de red) solo existe en compilaciones de debug.
 - La captura de red mide también con el consentimiento encendido, porque en iOS no hay Mux Data.
