@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>VenueNexa PoC</string>
+    <key>UILaunchScreen</key>
+    <dict/>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.venuenexa.pocios.oidc</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.venuenexa.pocios</string>
+            </array>
+        </dict>
+    </array>
+    <key>VNKeycloakIssuer</key>
+    <string></string>
+    <key>VNKeycloakClientID</key>
+    <string>venuenexa-ios</string>
+    <key>VNRedirectURI</key>
+    <string>com.venuenexa.pocios:/oauth2redirect</string>
+    <key>NSAppTransportSecurity</key>
+    <dict/>
+</dict>
+</plist>
