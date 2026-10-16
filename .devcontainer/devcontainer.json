@@ -1,0 +1,10 @@
+{
+  "name": "PoC iOS (Swift en Linux)",
+  "image": "swift:6.4.1-noble",
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["swiftlang.swift-vscode"]
+    }
+  }
+}

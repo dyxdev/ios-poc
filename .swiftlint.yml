@@ -1,0 +1,20 @@
+# ADR-IOS-0016: SwiftLint estricto. Sin `!`, `try!`, `print` ni `NSLog` (se usa `Logger`) fuera de pruebas (ver el .swiftlint.yml
+# de cada carpeta Tests). «Un tipo principal por archivo» se revisa a mano: `file_name` exigiría además que coincida el nombre.
+included:
+  - Packages
+excluded:
+  - "**/.build"
+opt_in_rules:
+  - force_unwrapping
+force_cast: error
+force_try: error
+force_unwrapping: error
+line_length:
+  warning: 120
+  error: 160
+custom_rules:
+  no_print_or_nslog:
+    name: "Sin print ni NSLog"
+    regex: '\b(print|NSLog)\('
+    message: "Usa Logger (ADR-IOS-0016); nunca registres tokens ni datos personales."
+    severity: error

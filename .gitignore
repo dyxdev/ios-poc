@@ -1,0 +1,18 @@
+.build/
+.swiftpm/
+*.xcodeproj/xcuserdata/
+xcuserdata/
+DerivedData/
+*.ipa
+*.xip
+Xcode*.xip
+.xtool/
+.DS_Store
+build.log
+# Nada de secretos en el repo: claves, .p8, perfiles y credenciales van fuera.
+*.p8
+*.mobileprovision
+*.p12
+.env
+.env.*
+*.log
