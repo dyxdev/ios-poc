@@ -1,0 +1,3 @@
+# ADR-IOS-0016: el force unwrap solo se prohíbe fuera de pruebas.
+disabled_rules:
+  - force_unwrapping
