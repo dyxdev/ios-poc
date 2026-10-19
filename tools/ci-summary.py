@@ -23,18 +23,27 @@ def escape(text: str) -> str:
     return text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
 
 
+TIMING = re.compile(r" after [0-9.]+ seconds")
+
+
 def summarize(lines: list[str]) -> tuple[list[str], list[str]]:
     seen: set[str] = set()
     errors: list[str] = []
+    failed_tests: list[str] = []
     for index, line in enumerate(lines):
-        text = line.strip()
+        text = TIMING.sub("", line.strip())
+        test = re.match(r"✘ Test (\S+) (?:recorded an issue|failed)", text)
+        if test and test.group(1) not in failed_tests:
+            failed_tests.append(test.group(1))
         if text and PATTERNS.search(text) and text not in seen:
             seen.add(text)
             errors.append(text[:MAX_LINE])
             if "error:" in text:
                 # Contexto: el compilador pone el código y las notas justo debajo (y en macros es lo único útil).
                 errors.extend(extra.strip()[:MAX_LINE] for extra in lines[index + 1 : index + 5] if extra.strip())
-    return errors[:MAX_LINES], lines[-15:]
+    # Resumen único de las pruebas que fallan: el límite de líneas no debe esconder ninguna.
+    head = [f"PRUEBAS QUE FALLAN ({len(failed_tests)}): " + ", ".join(failed_tests)] if failed_tests else []
+    return (head + errors)[:MAX_LINES], lines[-15:]
 
 
 def main() -> int:
