@@ -71,7 +71,8 @@
                     .frame(minHeight: Layout.minTouchTarget)
             }
             .padding(Spacing.md)
-            .frame(maxWidth: 260)
+            .frame(width: 260)
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
 

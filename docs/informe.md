@@ -43,6 +43,20 @@
 - **No verificado:** el workflow `ipa-sin-firmar` (compilación para dispositivo sin firmar y empaquetado del `.ipa`) y la
   instalación en un iPhone real (`docs/instalar-en-iphone.md`); ninguna herramienta de firma se ha probado.
 
+- **Revisión de las 20 capturas del run 2 (2026-10-19, Andy las descargó):** Inicio, Detalle, Cuenta, Propietario, Admin y
+  Diagnóstico se ven bien en claro y oscuro (la paleta oscura se ve coherente; **pendiente de su aprobación**), y el español
+  funciona (textos y formato `1450 € / día`). **Defectos hallados y corregidos en el código (sin verificar en un run nuevo):**
+  1. La bienvenida se salía de la pantalla por ambos lados: `scaledToFill` suelto ensanchaba el diseño. `VenueImage` va ahora
+     en un `Color.clear` con `.clipped()`.
+  2. Diagnóstico mostraba dos flechas de «volver» (la del sistema y la propia): se oculta la barra de navegación.
+  3. En Detalle la barra de pestañas tapaba la barra de reservar: se oculta la barra de pestañas.
+  4. El globo de aviso de perfiles salía recortado por arriba: mide ahora lo que necesita su texto.
+  5. `-VNSignedIn 1` no dejaba la sesión (salía «Guest»). **Hipótesis, no comprobada:** compilar sin firma (`CODE_SIGNING_ALLOWED=NO`)
+     quita los derechos de la app y el Keychain falla en el simulador; el job de capturas firma ahora ad hoc.
+  6. La captura `owner-en-light` salió en blanco (pantalla de arranque) y `owner-en-dark` bien: parece un fallo puntual de
+     tiempo de arranque, **sin explicación comprobada**. Si se repite, se subirá la espera (`SCREENSHOT_WAIT`).
+  Observación (no es un defecto): la barra de pestañas flota sobre el contenido (estilo iOS nuevo) y cubre el final del scroll.
+
 ## 1b. Defecto encontrado al escribir las pruebas
 `BackgroundBlockTransport.blockURL` releía la SAS con `queryItems`, que decodifica `%2B` y lo reescribe como `+`; Azure lee `+`
 como espacio y la firma fallaría (403). Corregido con `percentEncodedQueryItems` y con prueba. **No verificado contra Azure.**

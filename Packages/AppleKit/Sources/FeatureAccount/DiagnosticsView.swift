@@ -40,6 +40,7 @@
                 .padding(Spacing.lg)
             }
             .background(Theme.background)
+            .toolbar(.hidden, for: .navigationBar)
             .task { await model.load() }
         }
 

@@ -88,7 +88,7 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild build -project VenueNexa.xcodeproj -scheme VenueNexa -configuration Debug \
-            -destination "id=$SIM_UDID" -derivedDataPath build CODE_SIGNING_ALLOWED=NO | tee xcodebuild-app.log
+            -destination "id=$SIM_UDID" -derivedDataPath build CODE_SIGN_IDENTITY=- CODE_SIGNING_ALLOWED=YES | tee xcodebuild-app.log
       - name: Errores como anotaciones (compilación de la app)
         if: failure()
         run: 'python3 tools/ci-summary.py xcodebuild-app.log "macOS: compilación de la app"'

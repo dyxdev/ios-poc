@@ -37,6 +37,7 @@
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(Theme.background)
             .navigationBarBackButtonHidden()
+            .toolbar(.hidden, for: .tabBar)
             .zoomDestination(id: sharedKey)
             .task { await model.load() }
             .task { await model.observeSaved() }
