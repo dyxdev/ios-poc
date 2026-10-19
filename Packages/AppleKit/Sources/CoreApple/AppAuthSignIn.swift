@@ -67,8 +67,7 @@
         nonisolated private static func map(_ error: Error?) -> IdentityError {
             guard let error = error as NSError? else { return .failed }
             if error.domain == OIDGeneralErrorDomain,
-                error.code == OIDErrorCode.userCanceledAuthorizationFlow.rawValue
-            {
+                error.code == OIDErrorCode.userCanceledAuthorizationFlow.rawValue {
                 return .canceled
             }
             return .failed

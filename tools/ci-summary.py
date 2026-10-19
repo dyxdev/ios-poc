@@ -26,11 +26,14 @@ def escape(text: str) -> str:
 def summarize(lines: list[str]) -> tuple[list[str], list[str]]:
     seen: set[str] = set()
     errors: list[str] = []
-    for line in lines:
+    for index, line in enumerate(lines):
         text = line.strip()
         if text and PATTERNS.search(text) and text not in seen:
             seen.add(text)
             errors.append(text[:MAX_LINE])
+            if "error:" in text:
+                # Contexto: el compilador pone el código y las notas justo debajo (y en macros es lo único útil).
+                errors.extend(extra.strip()[:MAX_LINE] for extra in lines[index + 1 : index + 5] if extra.strip())
     return errors[:MAX_LINES], lines[-15:]
 
 

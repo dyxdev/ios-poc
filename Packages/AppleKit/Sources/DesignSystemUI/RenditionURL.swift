@@ -12,7 +12,7 @@ public enum RenditionURL {
             URLQueryItem(name: "auto", value: "format"),
             URLQueryItem(name: "fit", value: "crop"),
             URLQueryItem(name: "w", value: String(width)),
-            URLQueryItem(name: "q", value: "70"),
+            URLQueryItem(name: "q", value: "70")
         ]
         return components.url ?? base
     }

@@ -7,6 +7,9 @@ public enum Formatters {
         formatter.locale = locale
         formatter.numberStyle = .currency
         formatter.currencyCode = "EUR"
+        // Mínimo y máximo: en Linux (swift-corelibs) la moneda conserva 2 decimales mínimos si solo se limita el
+        // máximo.
+        formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 0
         return formatter.string(from: NSNumber(value: amount)) ?? "\(amount) €"
     }

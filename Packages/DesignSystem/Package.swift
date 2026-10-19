@@ -12,6 +12,6 @@ let package = Package(
     ],
     targets: [
         .target(name: "DesignTokens"),
-        .testTarget(name: "DesignTokensTests", dependencies: ["DesignTokens"]),
+        .testTarget(name: "DesignTokensTests", dependencies: ["DesignTokens"])
     ]
 )

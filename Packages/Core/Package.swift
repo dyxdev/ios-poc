@@ -18,7 +18,7 @@ let package = Package(
         .library(name: "CoreAttest", targets: ["CoreAttest"]),
         .library(name: "CorePlayback", targets: ["CorePlayback"]),
         .library(name: "CoreLinks", targets: ["CoreLinks"]),
-        .library(name: "CoreTesting", targets: ["CoreTesting"]),
+        .library(name: "CoreTesting", targets: ["CoreTesting"])
     ],
     targets: [
         .target(name: "CoreModel"),
@@ -35,7 +35,7 @@ let package = Package(
             name: "CoreTesting",
             dependencies: [
                 "CoreModel", "CoreVenues", "CoreConsent", "CoreIdentity", "CoreContext",
-                "CoreNetwork", "CoreUpload", "CoreAttest",
+                "CoreNetwork", "CoreUpload", "CoreAttest"
             ]
         ),
         .testTarget(name: "CoreModelTests", dependencies: ["CoreModel"]),
@@ -53,6 +53,6 @@ let package = Package(
         .testTarget(name: "CoreUploadTests", dependencies: ["CoreUpload", "CoreTesting"]),
         .testTarget(name: "CoreAttestTests", dependencies: ["CoreAttest", "CoreTesting"]),
         .testTarget(name: "CorePlaybackTests", dependencies: ["CorePlayback"]),
-        .testTarget(name: "CoreLinksTests", dependencies: ["CoreLinks"]),
+        .testTarget(name: "CoreLinksTests", dependencies: ["CoreLinks"])
     ]
 )

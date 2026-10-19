@@ -152,6 +152,6 @@ public enum DemoVenues {
             tourPlaybackID: nil,
             isAvailable: true,
             isFeatured: false
-        ),
+        )
     ]
 }

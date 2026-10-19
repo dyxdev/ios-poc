@@ -101,7 +101,7 @@ struct UploadSessionTests {
         try await session.run()
         let states = await counter.states
         #expect(states.last?.completed == [0, 1, 2, 3])
-        let json = try String(decoding: JSONEncoder().encode(states.last), as: UTF8.self)
+        let json = try String(data: JSONEncoder().encode(states.last), encoding: .utf8) ?? ""
         #expect(!json.contains("sig="))
         #expect(!json.lowercased().contains("sas"))
         #expect(!json.lowercased().contains("token"))

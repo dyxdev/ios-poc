@@ -14,8 +14,8 @@ public struct HexColor: Sendable, Equatable {
 
     /// Luminancia relativa de WCAG 2.x.
     public var luminance: Double {
-        func channel(_ c: Double) -> Double {
-            c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4)
+        func channel(_ value: Double) -> Double {
+            value <= 0.03928 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4)
         }
         return 0.2126 * channel(red) + 0.7152 * channel(green) + 0.0722 * channel(blue)
     }

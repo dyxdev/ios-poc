@@ -109,7 +109,7 @@ public final class BackgroundBlockTransport: NSObject, BlockTransport, @unchecke
         components.percentEncodedQueryItems =
             (components.percentEncodedQueryItems ?? []) + [
                 URLQueryItem(name: "comp", value: "block"),
-                URLQueryItem(name: "blockid", value: Self.percentEncode(blockID)),
+                URLQueryItem(name: "blockid", value: Self.percentEncode(blockID))
             ]
         guard let url = components.url else { throw UploadError.failed }
         return url

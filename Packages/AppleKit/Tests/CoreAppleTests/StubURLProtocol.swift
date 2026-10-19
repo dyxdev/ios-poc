@@ -2,7 +2,7 @@ import Foundation
 
 /// Servidor HTTP falso para las pruebas de los adaptadores de red: sin red real ni librerías de mocking (ADR-IOS-0015).
 /// Cada prueba usa un host propio (`registry.register(host:)`), así las pruebas en paralelo no se pisan.
-final class StubURLProtocol: URLProtocol, @unchecked Sendable {
+class StubURLProtocol: URLProtocol, @unchecked Sendable {
     struct Stub {
         let status: Int
         let body: Data
@@ -52,7 +52,7 @@ final class StubURLProtocol: URLProtocol, @unchecked Sendable {
 
         private static func readBody(_ request: URLRequest) -> String {
             if let data = request.httpBody {
-                return String(decoding: data, as: UTF8.self)
+                return String(data: data, encoding: .utf8) ?? ""
             }
             guard let stream = request.httpBodyStream else { return "" }
             stream.open()
@@ -64,7 +64,7 @@ final class StubURLProtocol: URLProtocol, @unchecked Sendable {
                 if count <= 0 { break }
                 data.append(buffer, count: count)
             }
-            return String(decoding: data, as: UTF8.self)
+            return String(data: data, encoding: .utf8) ?? ""
         }
     }
 

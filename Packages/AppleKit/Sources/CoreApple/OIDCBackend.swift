@@ -74,7 +74,7 @@ public struct OIDCBackend: AuthBackend {
             fields: [
                 "grant_type": "refresh_token",
                 "refresh_token": refreshToken,
-                "client_id": configuration.clientID,
+                "client_id": configuration.clientID
             ]
         )
         let (data, response) = try await send(request)
@@ -104,7 +104,7 @@ public struct OIDCBackend: AuthBackend {
             fields: [
                 "token": refreshToken,
                 "token_type_hint": "refresh_token",
-                "client_id": configuration.clientID,
+                "client_id": configuration.clientID
             ]
         )
         _ = try await send(request)
@@ -118,7 +118,7 @@ public struct OIDCBackend: AuthBackend {
         else { return nil }
         var items = [
             URLQueryItem(name: "client_id", value: configuration.clientID),
-            URLQueryItem(name: "post_logout_redirect_uri", value: configuration.redirectURI.absoluteString),
+            URLQueryItem(name: "post_logout_redirect_uri", value: configuration.redirectURI.absoluteString)
         ]
         if let idToken {
             items.append(URLQueryItem(name: "id_token_hint", value: idToken))

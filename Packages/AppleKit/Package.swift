@@ -19,13 +19,13 @@ let package = Package(
         .library(name: "FeatureDetail", targets: ["FeatureDetail"]),
         .library(name: "FeatureAccount", targets: ["FeatureAccount"]),
         .library(name: "FeatureOwner", targets: ["FeatureOwner"]),
-        .library(name: "FeatureAdmin", targets: ["FeatureAdmin"]),
+        .library(name: "FeatureAdmin", targets: ["FeatureAdmin"])
     ],
     dependencies: [
         .package(path: "../Core"),
         .package(path: "../DesignSystem"),
         .package(url: "https://github.com/kean/Nuke.git", from: "13.2.0"),
-        .package(url: "https://github.com/openid/AppAuth-iOS.git", from: "3.0.0"),
+        .package(url: "https://github.com/openid/AppAuth-iOS.git", from: "3.0.0")
     ],
     targets: [
         .target(name: "AppStrings", resources: [.process("Resources")]),
@@ -36,7 +36,7 @@ let package = Package(
                 .product(name: "CoreModel", package: "Core"),
                 .product(name: "DesignTokens", package: "DesignSystem"),
                 .product(name: "NukeUI", package: "Nuke"),
-                .product(name: "Nuke", package: "Nuke"),
+                .product(name: "Nuke", package: "Nuke")
             ],
             resources: [.process("Resources")]
         ),
@@ -51,7 +51,7 @@ let package = Package(
                 .product(name: "CoreUpload", package: "Core"),
                 .product(name: "CoreAttest", package: "Core"),
                 .product(name: "Nuke", package: "Nuke"),
-                .product(name: "AppAuth", package: "AppAuth-iOS"),
+                .product(name: "AppAuth", package: "AppAuth-iOS")
             ]
         ),
         .target(
@@ -59,7 +59,7 @@ let package = Package(
             dependencies: [
                 "AppStrings", "DesignSystemUI",
                 .product(name: "CoreContext", package: "Core"),
-                .product(name: "DesignTokens", package: "DesignSystem"),
+                .product(name: "DesignTokens", package: "DesignSystem")
             ]
         ),
         .target(
@@ -69,7 +69,7 @@ let package = Package(
                 .product(name: "CoreModel", package: "Core"),
                 .product(name: "CoreVenues", package: "Core"),
                 .product(name: "CoreContext", package: "Core"),
-                .product(name: "DesignTokens", package: "DesignSystem"),
+                .product(name: "DesignTokens", package: "DesignSystem")
             ]
         ),
         .target(
@@ -80,7 +80,7 @@ let package = Package(
                 .product(name: "CoreVenues", package: "Core"),
                 .product(name: "CoreConsent", package: "Core"),
                 .product(name: "CorePlayback", package: "Core"),
-                .product(name: "DesignTokens", package: "DesignSystem"),
+                .product(name: "DesignTokens", package: "DesignSystem")
             ]
         ),
         .target(
@@ -93,7 +93,7 @@ let package = Package(
                 .product(name: "CoreIdentity", package: "Core"),
                 .product(name: "CoreContext", package: "Core"),
                 .product(name: "CorePlayback", package: "Core"),
-                .product(name: "DesignTokens", package: "DesignSystem"),
+                .product(name: "DesignTokens", package: "DesignSystem")
             ]
         ),
         .target(
@@ -103,7 +103,7 @@ let package = Package(
                 .product(name: "CoreModel", package: "Core"),
                 .product(name: "CoreVenues", package: "Core"),
                 .product(name: "CoreContext", package: "Core"),
-                .product(name: "DesignTokens", package: "DesignSystem"),
+                .product(name: "DesignTokens", package: "DesignSystem")
             ]
         ),
         .target(
@@ -111,7 +111,7 @@ let package = Package(
             dependencies: [
                 "AppStrings", "DesignSystemUI", "ContextUI",
                 .product(name: "CoreContext", package: "Core"),
-                .product(name: "DesignTokens", package: "DesignSystem"),
+                .product(name: "DesignTokens", package: "DesignSystem")
             ]
         ),
         .testTarget(
@@ -123,7 +123,7 @@ let package = Package(
                 .product(name: "CoreModel", package: "Core"),
                 .product(name: "CoreContext", package: "Core"),
                 .product(name: "CoreConsent", package: "Core"),
-                .product(name: "CoreIdentity", package: "Core"),
+                .product(name: "CoreIdentity", package: "Core")
             ]
         ),
         .testTarget(
@@ -132,8 +132,8 @@ let package = Package(
                 "CoreApple",
                 .product(name: "CoreTesting", package: "Core"),
                 .product(name: "CoreUpload", package: "Core"),
-                .product(name: "CoreIdentity", package: "Core"),
+                .product(name: "CoreIdentity", package: "Core")
             ]
-        ),
+        )
     ]
 )

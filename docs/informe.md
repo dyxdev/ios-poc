@@ -25,6 +25,24 @@
   job `app-screenshots`, `tools/pick-simulator.sh` (probado solo con datos de ejemplo: elige el iPhone del iOS más nuevo) y
   `tools/ci-screenshots.sh` (solo la sintaxis).
 
+- **Segundo run del CI (2026-10-19, commit `4dd90f2`, run 2; anotaciones públicas):**
+  - **Pasó `app-screenshots`:** el proyecto XcodeGen genera la app, compila para el simulador, se instala, se lanza y sale el
+    artefacto `capturas` (~21 MB, 19 imágenes). El paso de capturas tarda unos 10 minutos. **Las capturas aún no se han
+    revisado.**
+  - **Falló Linux por un defecto real de portabilidad:** `Formatters.price` fijaba solo `maximumFractionDigits = 0`; en Linux
+    (swift-corelibs) el estilo de moneda conserva 2 decimales mínimos y salía «1.450,00 €». Corregido fijando también el mínimo.
+    Lo detectó la prueba `priceHasNoDecimalsAndTheEuroSign`; en macOS pasaba.
+  - **Falló la compilación de las pruebas de AppleKit** (`FeatureTests`): `error: call can throw, but it is not marked with 'try'`
+    dentro de la expansión de un `#expect` de `HomeAndDetailModelTests`. Causa no confirmada (sospecha: la línea con
+    `allSatisfy(\.isFeatured)` o con `DemoVenues.all.count`); las líneas se reescribieron fuera del macro. **Los módulos de
+    AppleKit (fuentes) sí compilaron:** el error es solo de la prueba.
+  - **Falló SwiftLint (44 avisos):** coma final, nombres cortos, `String(decoding:)`, `class` en una clase final. Se corrigió con
+    `swiftlint --fix` y a mano; con SwiftLint 0.65.1 (binario de Linux, sin SourceKit) ahora sale 0. **No verificado:** la regla
+    propia `no_print_or_nslog` y otras que exigen SourceKit.
+
+- **No verificado:** el workflow `ipa-sin-firmar` (compilación para dispositivo sin firmar y empaquetado del `.ipa`) y la
+  instalación en un iPhone real (`docs/instalar-en-iphone.md`); ninguna herramienta de firma se ha probado.
+
 ## 1b. Defecto encontrado al escribir las pruebas
 `BackgroundBlockTransport.blockURL` releía la SAS con `queryItems`, que decodifica `%2B` y lo reescribe como `+`; Azure lee `+`
 como espacio y la firma fallaría (403). Corregido con `percentEncodedQueryItems` y con prueba. **No verificado contra Azure.**

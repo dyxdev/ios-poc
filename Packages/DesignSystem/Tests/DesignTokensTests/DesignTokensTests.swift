@@ -9,9 +9,9 @@ struct ContrastTests {
     }
 
     @Test func orderDoesNotMatter() {
-        let a = HexColor(0x141217)
-        let b = HexColor(0xF4F3EF)
-        #expect(Contrast.ratio(a, b) == Contrast.ratio(b, a))
+        let dark = HexColor(0x141217)
+        let light = HexColor(0xF4F3EF)
+        #expect(Contrast.ratio(dark, light) == Contrast.ratio(light, dark))
     }
 }
 
@@ -26,7 +26,7 @@ struct PaletteContrastTests {
             ("onPrimary/primary", Contrast.ratio(palette.onPrimary, palette.primary)),
             ("onAccent/accent", Contrast.ratio(palette.onAccent, palette.accent)),
             ("success/surface", Contrast.ratio(palette.success, palette.surface)),
-            ("primary/surface", Contrast.ratio(palette.primary, palette.surface)),
+            ("primary/surface", Contrast.ratio(palette.primary, palette.surface))
         ]
     }
 

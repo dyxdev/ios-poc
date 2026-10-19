@@ -64,7 +64,7 @@ struct SSEClientTests {
     @Test func reconnectsSendingLastEventIDAndDoesNotRepeatOrLoseEvents() async throws {
         let transport = FakeSSETransport(scripts: [
             .init(chunks: ["id: 1\ndata: a\n\n"], failure: .network),
-            .init(chunks: ["id: 2\ndata: b\n\n"]),
+            .init(chunks: ["id: 2\ndata: b\n\n"])
         ])
         let client = SSEClient(transport: transport, maxRetries: 3, backoff: { _ in .zero }, sleep: { _ in })
         var received: [String] = []

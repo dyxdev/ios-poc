@@ -28,6 +28,9 @@ public struct SSELineDecoder: Sendable {
         if buffer.last == 0x0D {
             buffer.removeLast()
         }
+        // `buffer` es [UInt8], no Data: `String(decoding:)` sustituye los bytes inválidos en vez de devolver nil, y una
+        // línea perdida se leería como línea vacía (fin de evento).
+        // swiftlint:disable:next optional_data_string_conversion
         let line = String(decoding: buffer, as: UTF8.self)
         buffer.removeAll(keepingCapacity: true)
         return line

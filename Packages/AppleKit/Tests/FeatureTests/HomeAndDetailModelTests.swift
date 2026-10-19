@@ -18,8 +18,10 @@ struct HomeModelTests {
         #expect(model.isLoading)
         await model.load()
         #expect(!model.isLoading)
-        #expect(model.allVenues.count == DemoVenues.all.count)
-        #expect(model.featured.allSatisfy(\.isFeatured))
+        let expectedCount = DemoVenues.all.count
+        #expect(model.allVenues.count == expectedCount)
+        let everyFeaturedIsMarked = model.featured.allSatisfy { $0.isFeatured }
+        #expect(everyFeaturedIsMarked)
     }
 
     @Test func searchAndCategoryFilterTheResultsAndClearRestoresThem() async {

@@ -52,7 +52,7 @@ public struct KeychainTokenStore: TokenStore {
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
             kSecAttrAccount as String: account,
-            kSecAttrSynchronizable as String: false,
+            kSecAttrSynchronizable as String: false
         ]
     }
 }
