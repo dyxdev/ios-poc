@@ -1,0 +1,68 @@
+name: ipa-sin-firmar
+
+# Construye un .ipa SIN FIRMAR para instalarlo en un iPhone real. Se lanza a mano: Actions > ipa-sin-firmar > Run workflow.
+# Un .ipa sin firmar no se instala tal cual: hay que firmarlo con tu Apple ID (ver docs/instalar-en-iphone.md).
+# Sin verificar: este workflow no se ha ejecutado todavia.
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: "Debug incluye Diagnostico y el simulador de capacidades (recomendado en la PoC); Release no"
+        type: choice
+        options: [Debug, Release]
+        default: Debug
+      keycloak_issuer:
+        description: "Emisor de Keycloak (https://host/realms/realm). Vacio = la app arranca como invitado"
+        type: string
+        default: ""
+
+jobs:
+  ipa:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Versiones
+        run: |
+          swift --version
+          xcodebuild -version
+      - name: Emisor de Keycloak (solo en este runner, no se sube al repo)
+        if: ${{ inputs.keycloak_issuer != '' }}
+        env:
+          ISSUER: ${{ inputs.keycloak_issuer }}
+        run: bash tools/set-issuer.sh "$ISSUER"
+      - name: Genera el proyecto de Xcode
+        run: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Compila para dispositivo sin firmar
+        env:
+          CONFIGURATION: ${{ inputs.configuration }}
+        run: |
+          set -o pipefail
+          xcodebuild build -project VenueNexa.xcodeproj -scheme VenueNexa -configuration "$CONFIGURATION" \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" ENABLE_DEBUG_DYLIB=NO \
+            | tee xcodebuild-ipa.log
+      - name: Errores como anotaciones
+        if: failure()
+        run: 'python3 tools/ci-summary.py xcodebuild-ipa.log "macOS: compilacion del ipa"'
+      - name: Empaqueta el .ipa
+        env:
+          CONFIGURATION: ${{ inputs.configuration }}
+        run: |
+          app="build/Build/Products/${CONFIGURATION}-iphoneos/VenueNexa.app"
+          test -d "$app"
+          rm -rf ipa && mkdir -p ipa/Payload
+          cp -R "$app" ipa/Payload/
+          (cd ipa && zip -qry VenueNexa-unsigned.ipa Payload)
+          plutil -p "$app/Info.plist" | grep -E "CFBundleIdentifier|MinimumOSVersion|CFBundleShortVersionString|VNKeycloakIssuer"
+          file "$app/VenueNexa"
+          ls -la ipa
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ipa-sin-firmar
+          path: |
+            ipa/VenueNexa-unsigned.ipa
+            xcodebuild-ipa.log
+          retention-days: 14
