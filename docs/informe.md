@@ -57,6 +57,12 @@
      tiempo de arranque, **sin explicación comprobada**. Si se repite, se subirá la espera (`SCREENSHOT_WAIT`).
   Observación (no es un defecto): la barra de pestañas flota sobre el contenido (estilo iOS nuevo) y cubre el final del scroll.
 
+- **Tercer run del CI (2026-10-19, commit `8576552`):** **pasaron** `linux-tests` (la moneda en Linux quedó bien), `app-screenshots`
+  (capturas nuevas) y SwiftLint 0.65.1 en macOS. **Las pruebas de AppleKit ya compilan y se ejecutan** en el simulador; fallan
+  las de `OIDCBackend` (`.network` en todas) por un error de MI prueba: el servidor falso registraba el descubrimiento en
+  `/.well-known/openid-configuration` y la app lo pide bajo `/realms/test/`. Corregido; **sin verificar en un run nuevo**. Pueden
+  quedar fallos de otras pruebas de AppleKit que el resumen de anotaciones no mostró (se limita a 45 líneas).
+
 ## 1b. Defecto encontrado al escribir las pruebas
 `BackgroundBlockTransport.blockURL` releía la SAS con `queryItems`, que decodifica `%2B` y lo reescribe como `+`; Azure lee `+`
 como espacio y la firma fallaría (403). Corregido con `percentEncodedQueryItems` y con prueba. **No verificado contra Azure.**

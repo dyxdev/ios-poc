@@ -15,8 +15,10 @@ private func discoveryJSON(host: String, withRevocation: Bool = true, withEndSes
 
 private func backend(host: String, routes: [String: StubURLProtocol.Stub]) -> OIDCBackend {
     var all = routes
-    if all["/.well-known/openid-configuration"] == nil {
-        all["/.well-known/openid-configuration"] = .init(status: 200, body: discoveryJSON(host: host))
+    // El emisor es https://host/realms/test: el descubrimiento cuelga de su ruta.
+    let discoveryPath = "/realms/test/.well-known/openid-configuration"
+    if all[discoveryPath] == nil {
+        all[discoveryPath] = .init(status: 200, body: discoveryJSON(host: host))
     }
     StubURLProtocol.registry.register(host: host, routes: all)
     let configuration = OIDCConfiguration(
