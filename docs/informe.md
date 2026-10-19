@@ -3,6 +3,11 @@
 > Cada afirmación es un **hecho comprobado**, una **inferencia** marcada o **«no verificado»**. Estado a 2026-10-16.
 
 ## 1. Estado
+- **Primer run del CI (2026-10-16, commit `9b7e7f2`, run 1; estado leído de la API pública de GitHub el 2026-10-19):**
+  en macOS **pasaron** las pruebas de Core y DesignSystem (paso «Paquetes de Swift puro en macOS»: Swift 6 estricto compila esa
+  parte y sus pruebas pasan). **Fallaron:** el job de Linux (`swift test`, salida 1) y las pruebas de AppleKit en el simulador
+  (`xcodebuild`, salida 65; SwiftLint y la compilación de la app no llegaron a ejecutarse). Los logs exigen autenticación, así
+  que el motivo **no se conoce todavía**; `tools/ci-summary.py` deja los errores como anotaciones públicas para el run 2.
 - **No verificado:** que algún código de este repo compile. No hay Swift, Xcode ni macOS en la máquina de desarrollo.
 - **No verificado:** que pasen las pruebas de `Packages/Core` y `Packages/DesignSystem`; se ejecutan con `bash tools/test-all.sh`
   en el Codespace y en el job `linux-tests` del CI.
@@ -15,6 +20,10 @@
   falla con `litix.io` y con un host no aprobado).
 - **Revisión estática propia:** ningún `import` sin su dependencia declarada y ninguna línea de más de 120 caracteres
   (script puntual, no sustituye al compilador ni a SwiftLint).
+
+- **No verificado:** `project.yml` (XcodeGen), su combinación con `Info.plist` (`GENERATE_INFOPLIST_FILE` junto a `INFOPLIST_FILE`), el
+  job `app-screenshots`, `tools/pick-simulator.sh` (probado solo con datos de ejemplo: elige el iPhone del iOS más nuevo) y
+  `tools/ci-screenshots.sh` (solo la sintaxis).
 
 ## 1b. Defecto encontrado al escribir las pruebas
 `BackgroundBlockTransport.blockURL` releía la SAS con `queryItems`, que decodifica `%2B` y lo reescribe como `+`; Azure lee `+`

@@ -1,0 +1,67 @@
+# Proyecto de Xcode generado con XcodeGen (`xcodegen generate`). El archivo `.xcodeproj` NO se guarda en el repo.
+# Existe porque el `Package.swift` de la raíz es una biblioteca: `xcodebuild` solo genera un `.app` instalable en el
+# simulador desde un proyecto con un destino de aplicación. La lógica sigue en `Packages/`; esto solo empaqueta la app.
+# SIN VERIFICAR: ni el formato de este archivo ni la combinación con Info.plist se han ejecutado.
+name: VenueNexa
+options:
+  bundleIdPrefix: com.venuenexa
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+packages:
+  Core:
+    path: Packages/Core
+  DesignSystem:
+    path: Packages/DesignSystem
+  AppleKit:
+    path: Packages/AppleKit
+targets:
+  VenueNexa:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources/VenueNexaApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.venuenexa.pocios
+        PRODUCT_NAME: VenueNexa
+        INFOPLIST_FILE: Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "6.0"
+    dependencies:
+      - package: Core
+        product: CoreModel
+      - package: Core
+        product: CoreVenues
+      - package: Core
+        product: CoreConsent
+      - package: Core
+        product: CoreIdentity
+      - package: Core
+        product: CoreContext
+      - package: Core
+        product: CoreLinks
+      - package: DesignSystem
+        product: DesignTokens
+      - package: AppleKit
+        product: AppStrings
+      - package: AppleKit
+        product: DesignSystemUI
+      - package: AppleKit
+        product: CoreApple
+      - package: AppleKit
+        product: ContextUI
+      - package: AppleKit
+        product: FeatureHome
+      - package: AppleKit
+        product: FeatureDetail
+      - package: AppleKit
+        product: FeatureAccount
+      - package: AppleKit
+        product: FeatureOwner
+      - package: AppleKit
+        product: FeatureAdmin

@@ -36,6 +36,7 @@ final class AppServices {
     let diagnostics: DiagnosticsModel
 
     private let keychain: KeychainTokenStore
+    private let simulator: CapabilitySimulator?
     private let cleanup: SessionCleanup
     private let actions: SessionActions
 
@@ -66,6 +67,8 @@ final class AppServices {
         #endif
         let switcher = ContextSwitcherModel(manager: contextManager, capabilities: capabilities)
         self.switcher = switcher
+        let simulator = capabilities as? CapabilitySimulator
+        self.simulator = simulator
 
         let actions = SessionActions(identity: identity, configuration: configuration)
         self.actions = actions
@@ -86,7 +89,7 @@ final class AppServices {
             signIn: signIn
         )
         diagnostics = DiagnosticsModel(
-            simulator: capabilities as? CapabilitySimulator,
+            simulator: simulator,
             onboarding: onboarding,
             approvedSuffixes: Self.approvedSuffixes(configuration)
         ) {
@@ -106,9 +109,22 @@ final class AppServices {
     /// Arranque: borra el Keychain tras una instalación nueva, lee el consentimiento y restaura la sesión guardada.
     func bootstrap() async {
         await FreshInstallGuard.clearKeychainIfFreshInstall(store: keychain)
+        #if DEBUG
+            // Capturas de CI: sesión falsa guardada DESPUÉS del borrado de instalación nueva y antes de restaurar.
+            if LaunchOverrides.wantsSession {
+                try? await keychain.write(LaunchOverrides.fakeTokens)
+            }
+        #endif
         await consent.load()
         await identity.restore()
     }
+
+    #if DEBUG
+        /// Solo capturas: concede el perfil de administración en el simulador para poder abrir esa pantalla.
+        func grantAdminForScreenshots() async {
+            await simulator?.setGranted(.admin, true)
+        }
+    #endif
 
     /// Limpieza al cerrar sesión por cualquier camino (ADR-IOS-0007 y paridad con ADR-AND-0034).
     func watchCleanup() async {

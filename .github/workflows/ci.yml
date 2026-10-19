@@ -15,6 +15,9 @@ jobs:
         run: apt-get update -qq && apt-get install -y -qq python3 git >/dev/null
       - name: swift test (paquetes de Swift puro) y claves de texto
         run: bash tools/test-all.sh
+      - name: Errores como anotaciones (los logs exigen autenticación)
+        if: failure()
+        run: 'python3 tools/ci-summary.py build.log "Linux: swift test"'
 
   # Nivel B: macOS. Sin verificar: la versión de Xcode del runner `macos-latest`, los nombres de los esquemas que genera
   # SwiftPM y el simulador elegido. Cada paso imprime lo que usa para poder corregirlo con la salida real.
@@ -34,34 +37,67 @@ jobs:
           done
       - name: Elige un simulador de iPhone
         run: |
-          NAME=$(xcrun simctl list devices available -j | python3 -c "
-          import json, sys
-          devices = [d for runtime in json.load(sys.stdin)['devices'].values() for d in runtime]
-          names = sorted({d['name'] for d in devices if d['name'].startswith('iPhone')})
-          print(names[-1])")
-          echo "SIM_NAME=$NAME" >> "$GITHUB_ENV"
-          echo "Simulador: $NAME"
-      - name: Esquemas de AppleKit y de la app
+          UDID=$(bash tools/pick-simulator.sh)
+          echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
+      - name: Esquemas de AppleKit
         run: |
           (cd Packages/AppleKit && xcodebuild -list)
-          xcodebuild -list
       - name: Pruebas de AppleKit en el simulador de iOS
         working-directory: Packages/AppleKit
         run: |
           set -o pipefail
           xcodebuild test -scheme AppleKit-Package \
-            -destination "platform=iOS Simulator,name=$SIM_NAME" | tee ../../xcodebuild-test.log
-      - name: Compila la app para el simulador de iOS
+            -destination "id=$SIM_UDID" | tee ../../xcodebuild-test.log
+      - name: Errores como anotaciones (pruebas de AppleKit)
+        if: failure()
+        run: 'python3 tools/ci-summary.py xcodebuild-test.log "macOS: pruebas de AppleKit"'
+      - name: SwiftLint
+        if: ${{ !cancelled() }}
         run: |
           set -o pipefail
-          xcodebuild build -scheme VenueNexaApp \
-            -destination "platform=iOS Simulator,name=$SIM_NAME" | tee xcodebuild-app.log
-      - name: SwiftLint
-        run: |
           brew install swiftlint
-          swiftlint --strict
+          swiftlint --strict | tee swiftlint.log
+      - name: Errores como anotaciones (SwiftLint)
+        if: failure()
+        run: 'python3 tools/ci-summary.py swiftlint.log "macOS: SwiftLint"'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: logs-macos
           path: "*.log"
+
+  # Nivel B con ojos: compila la app como .app para el simulador (proyecto generado con XcodeGen), la instala y saca una
+  # captura de cada pantalla en claro y oscuro. Las capturas son un artefacto del run (`capturas`). Sin verificar.
+  app-screenshots:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Versiones
+        run: |
+          swift --version
+          xcodebuild -version
+      - name: Genera el proyecto de Xcode
+        run: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Elige un simulador de iPhone
+        run: |
+          UDID=$(bash tools/pick-simulator.sh)
+          echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
+      - name: Compila la app para el simulador (debug)
+        run: |
+          set -o pipefail
+          xcodebuild build -project VenueNexa.xcodeproj -scheme VenueNexa -configuration Debug \
+            -destination "id=$SIM_UDID" -derivedDataPath build CODE_SIGNING_ALLOWED=NO | tee xcodebuild-app.log
+      - name: Errores como anotaciones (compilación de la app)
+        if: failure()
+        run: 'python3 tools/ci-summary.py xcodebuild-app.log "macOS: compilación de la app"'
+      - name: Capturas de cada pantalla
+        run: bash tools/ci-screenshots.sh "$SIM_UDID" build/Build/Products/Debug-iphonesimulator/VenueNexa.app capturas
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capturas
+          path: |
+            capturas
+            xcodebuild-app.log

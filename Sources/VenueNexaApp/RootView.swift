@@ -50,7 +50,10 @@ struct RootView: View {
         .background(Theme.background)
         .task {
             await services.bootstrap()
-            let seen = await services.onboarding.welcomeSeen()
+            var seen = await services.onboarding.welcomeSeen()
+            #if DEBUG
+                seen = await applyLaunchOverrides(seen: seen)
+            #endif
             phase = seen ? .main : .welcome
         }
         .task { await services.watchCleanup() }
@@ -132,6 +135,33 @@ struct RootView: View {
             }
         }
     }
+
+    #if DEBUG
+        /// Solo capturas de CI (ver `LaunchOverrides`): lleva la app a la pantalla pedida. Devuelve si la bienvenida
+        /// cuenta como vista.
+        private func applyLaunchOverrides(seen: Bool) async -> Bool {
+            guard let screen = LaunchOverrides.screen else { return seen }
+            if screen == "welcome" { return false }
+            await services.onboarding.setWelcomeSeen()
+            switch screen {
+            case "detail":
+                selection = .home
+                homePath = [.venue(id: "jardin-acacias", sharedKey: "captura")]
+            case "account":
+                selection = .account
+            case "diagnostics":
+                selection = .account
+                accountPath = [.diagnostics]
+            case "owner", "admin":
+                if screen == "admin" { await services.grantAdminForScreenshots() }
+                await services.switcher.update(signedIn: true)
+                if let context = LaunchOverrides.context { services.switcher.select(context) }
+            default:
+                break
+            }
+            return true
+        }
+    #endif
 
     /// Universal links (ADR-IOS-0003). Los de venues abren el detalle en la pestaña de Inicio.
     private func open(_ url: URL) {

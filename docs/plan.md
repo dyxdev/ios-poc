@@ -34,7 +34,8 @@ simulador de iOS, SwiftLint, capturas. C iPhone real.
   reconexión, subida por bloques, política de App Attest, URL de vídeo firmada y evaluación de capturas de red, router de
   universal links, tokens de diseño. Pruebas con Swift Testing.
 - **F2 App SwiftUI (escrita):** Inicio, Detalle con AVPlayer, Cuenta, bienvenida, hoja de perfiles, Propietario, Admin,
-  Diagnóstico, claro y oscuro. **Pendiente:** capturas reales para aprobación (necesita macOS o `xtool`).
+  Diagnóstico, claro y oscuro. **Pendiente:** capturas reales para aprobación: las saca el job `app-screenshots` del CI (macOS
+  de GitHub) con un proyecto XcodeGen; sin verificar.
 - **F3 Identidad real (escrita):** AppAuth, Keychain, cierre SSO y cliente `venuenexa-ios` en `tools/keycloak-test/`.
 - **F4 Puntos críticos reales (en parte):** hecho el procedimiento de captura de red y la evaluación de hosts
   (`tools/capture-hosts.py`, Diagnóstico). **Sin pantalla de prueba:** SSE, subida por bloques y App Attest tienen adaptador y

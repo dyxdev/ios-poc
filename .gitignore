@@ -16,3 +16,5 @@ build.log
 .env
 .env.*
 *.log
+VenueNexa.xcodeproj/
+build/
