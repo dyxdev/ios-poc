@@ -40,3 +40,14 @@ Apple ID. Pasos y límites en `docs/instalar-en-iphone.md` (sin verificar).
 Cada push ejecuta el job `app-screenshots`. Las capturas salen del artefacto `capturas` del run (pestaña Actions). Usan
 argumentos de lanzamiento solo de debug (`-VNScreen`, `-VNSignedIn`; `Sources/VenueNexaApp/LaunchOverrides.swift`) y una sesión
 **falsa** sin servidor; no existen en release. En un Mac: `xcodegen generate`, abrir `VenueNexa.xcodeproj` y ejecutar.
+
+## Cómo usarla como referencia
+Decisión de Andy (2026-10-20): lo que quede aquí se usa como referencia en la implementación del proyecto real. Contenido y estado de
+cada parte en `docs/informe.md` (§3 a §5) y su cruce con los ADR en `docs/informe.md` (§7).
+- **Reutilizable como referencia (probado en el CI):** `Packages/Core` (Swift puro, ~100 pruebas en Linux y macOS), `DesignSystem`,
+  los adaptadores de `AppleKit` (Keychain, OIDC, subida por bloques con la regla de la SAS y SSE; Keychain y OIDC solo probados en
+  simulador), la estructura de CI por niveles A, B y C y el script de paridad EN/ES.
+- **Solo de PoC, no copiar a la app real:** las capacidades simuladas, `LaunchOverrides` y la sesión falsa, los datos de ejemplo, la
+  pantalla de Diagnóstico y las pantallas de ejemplo de Propietario y Administración.
+- **No verificado (no darlo por probado):** todo el nivel C (iPhone real, login con Keycloak, App Attest, push, subida en segundo
+  plano, vídeo real); el reproductor según el consentimiento del 2026-10-19 (la PoC solo implementa la regla anterior).
