@@ -63,6 +63,11 @@
   `/.well-known/openid-configuration` y la app lo pide bajo `/realms/test/`. Corregido; **sin verificar en un run nuevo**. Pueden
   quedar fallos de otras pruebas de AppleKit que el resumen de anotaciones no mostró (se limita a 45 líneas).
 
+- **Cuarto run del CI (2026-10-20, commit `bc0c5f9`): los 3 jobs pasan** (`linux-tests`, `macos-build` y `app-screenshots`).
+  Medido: pruebas de Core y DesignSystem en Linux y macOS; pruebas de AppleKit en el simulador de iOS; SwiftLint 0.65.1; la app
+  compila para el simulador, se instala y se lanza; artefacto `capturas` de ~22 MB. **Sigue sin verificar:** las capturas de este
+  run (no revisadas), el workflow `ipa-sin-firmar` (manual, no ejecutado) y todo el nivel C (iPhone real).
+
 ## 1b. Defecto encontrado al escribir las pruebas
 `BackgroundBlockTransport.blockURL` releía la SAS con `queryItems`, que decodifica `%2B` y lo reescribe como `+`; Azure lee `+`
 como espacio y la firma fallaría (403). Corregido con `percentEncodedQueryItems` y con prueba. **No verificado contra Azure.**

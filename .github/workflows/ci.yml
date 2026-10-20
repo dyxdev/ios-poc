@@ -92,6 +92,16 @@ jobs:
       - name: Errores como anotaciones (compilación de la app)
         if: failure()
         run: 'python3 tools/ci-summary.py xcodebuild-app.log "macOS: compilación de la app"'
+      - name: Comprime la app del simulador
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            build/Build/Products/Debug-iphonesimulator/VenueNexa.app VenueNexa-simulator.zip
+          ls -la VenueNexa-simulator.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-simulador
+          path: VenueNexa-simulator.zip
+          retention-days: 14
       - name: Capturas de cada pantalla
         run: bash tools/ci-screenshots.sh "$SIM_UDID" build/Build/Products/Debug-iphonesimulator/VenueNexa.app capturas
       - uses: actions/upload-artifact@v4

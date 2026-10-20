@@ -28,6 +28,10 @@ Codespace (Linux, Swift puro) y el runner de macOS de GitHub Actions. Ver `docs/
 `bash tools/keycloak-test/start.sh` (en un Codespace) y después `bash tools/set-issuer.sh <emisor que imprime>`. Sin emisor la
 app funciona como invitado y el login responde «no configurado». Todo va por HTTPS (ATS sin excepciones).
 
+## Probar en el simulador
+El CI sube la app del simulador (artefacto `app-simulador`). En un Mac: `bash tools/run-in-simulator.sh VenueNexa-simulator.zip`.
+Todas las opciones (Mac, Actions, sin Mac) en `docs/probar-en-simulador.md` (sin verificar en un Mac).
+
 ## Instalar en un iPhone (sin Mac)
 El workflow manual `ipa-sin-firmar` (Actions → Run workflow) genera un `.ipa` sin firmar como artefacto; se firma e instala con tu
 Apple ID. Pasos y límites en `docs/instalar-en-iphone.md` (sin verificar).
